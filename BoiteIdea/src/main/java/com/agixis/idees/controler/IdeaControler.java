@@ -6,7 +6,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,17 +23,22 @@ import com.agixis.idees.services.IdeaService;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin("*")
 public class IdeaControler {
 	@Autowired
 	private IdeaService ideaRepoService;
 
 	@GetMapping("/AllIdea")
+	@ResponseBody
 	public List<Idea> getAllIdea() {
 		return ideaRepoService.getAllIdea();
 	}
 
 	@GetMapping("/Idea/{id}")
 	public ResponseEntity<Idea> getIdeaById(@PathVariable("id") Long id) {
+		if(id == null){
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 		return ideaRepoService.getIdeaById(id);
 	}
 

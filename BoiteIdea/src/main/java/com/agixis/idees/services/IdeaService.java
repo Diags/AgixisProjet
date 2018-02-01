@@ -13,7 +13,7 @@ public interface IdeaService {
 	/**
 	 * @return la liste de toutes les idées
 	 */
-	public List<Idea> getAllIdea();
+	 public List<Idea> getAllIdea();
 
 	public ResponseEntity<Idea> getIdeaById(Long id);
 

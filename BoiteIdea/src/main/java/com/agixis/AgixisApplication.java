@@ -13,10 +13,14 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import javax.persistence.Entity;
+
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Stream;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.agixis.idees.services","com.agixis.idees.controller","com.agixis.evenement.services","com.agixis.evenement.controller" })
+@ComponentScan(basePackages = { "com.agixis.idees.services", "com.agixis.idees.controller",
+		"com.agixis.evenement.services", "com.agixis.evenement.controller" })
 @EntityScan("com.agixis")
 @EnableJpaRepositories("com.agixis")
 public class AgixisApplication implements CommandLineRunner {
@@ -26,17 +30,25 @@ public class AgixisApplication implements CommandLineRunner {
 
 	@Autowired
 	private EvenementRepository evenementRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(AgixisApplication.class, args);
 	}
 
 	@Override
 	public void run(String... strings) throws Exception {
-		Stream.of("bonjour", "comment").forEach(idea -> evenementRepository.save(new Evenement(idea, idea)));
-		evenementRepository.findAll().stream().forEach(System.out::println);
-		
-		Stream.of("bonjour", "comment").forEach(idea -> ideaRepository.save(new Idea(idea, "tot@gmail.com", idea)));
-		ideaRepository.findAll().stream().forEach(System.out::println);
+		List<Idea> ideas = Arrays.asList(new Idea("sylla", "toto@gmailµ.com", "bombons"),
+				new Idea("bouna", "toto@gmailµ.com", "cococ"));
+		List<Evenement> evenements = Arrays.asList(new Evenement("diouf", "toto@gmailµ.com"),
+				new Evenement("Abdou", "toto@gmailµ.com"));
+
+		ideas.stream().forEach(idea -> ideaRepository.save(idea));
+
+		ideaRepository.findAll().stream().map(ide -> ide.getCreateBy()).forEach(System.out::println);
+	System.out.println("***********************************************");
+		evenements.stream().forEach(evenement -> evenementRepository.save(evenement));
+
+		evenementRepository.findAll().stream().map(ide -> ide.getCreateBy()).forEach(System.out::println);
 
 	}
 }
